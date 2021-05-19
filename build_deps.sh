@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 
 DEPS_LOCATION=_build/deps
 DESTINATION=libphonenumber
@@ -28,7 +28,7 @@ function fail_check
 
 qmake_unix()
 {
-	fail_check cmake \
+    fail_check cmake \
         -DCMAKE_C_FLAGS="-fPIC" \
         -DCMAKE_CXX_FLAGS="-fPIC -std=c++11 " \
         -DCMAKE_INSTALL_PREFIX:PATH=install \
@@ -44,14 +44,14 @@ qmake_darwin()
 {
     export PKG_CONFIG_PATH="/usr/local/opt/icu4c/lib/pkgconfig"
 
-	fail_check cmake \
+    fail_check cmake \
         -DCMAKE_CXX_FLAGS="-std=c++11 " \
         -DCMAKE_INSTALL_PREFIX:PATH=install \
-	    -DUSE_BOOST=OFF \
-	    -DUSE_RE2=OFF \
-	    -DUSE_ICU_REGEXP=ON \
-	    -DREGENERATE_METADATA=OFF \
-	    -USE_STDMUTEX=ON \
+        -DUSE_BOOST=OFF \
+        -DUSE_RE2=OFF \
+        -DUSE_ICU_REGEXP=ON \
+        -DREGENERATE_METADATA=OFF \
+        -USE_STDMUTEX=ON \
         -DICU_UC_INCLUDE_DIR=/usr/local/opt/icu4c/include \
         -DICU_UC_LIB=/usr/local/opt/icu4c/lib/libicuuc.dylib \
         -DICU_I18N_INCLUDE_DIR=/usr/local/opt/icu4c/include \
@@ -63,15 +63,16 @@ qmake_darwin()
 
 install_libphonenumber()
 {
-	git clone ${LIB_PHONE_NUMBER_REPO} ${DESTINATION}
-	pushd ${DESTINATION}
-	fail_check git checkout ${LIB_PHONE_NUMBER_REV}
-	popd
+    git clone ${LIB_PHONE_NUMBER_REPO} ${DESTINATION}
+    old_path_1=`pwd`
+    cd ${DESTINATION}
+    fail_check git checkout ${LIB_PHONE_NUMBER_REV}
+    cd $old_path_1
 
-	mkdir -p ${DESTINATION}/cpp/build
-	pushd ${DESTINATION}/cpp/build
+    mkdir -p ${DESTINATION}/cpp/build
+    cd ${DESTINATION}/cpp/build
 
-	case $OS in
+    case $OS in
         Linux)
             qmake_unix
         ;;
@@ -81,13 +82,13 @@ install_libphonenumber()
         ;;
 
         *)
-            echo "Your system $OS is not supported"
+            echo "Your system $OS $KERNEL is not supported"
             exit 1
     esac
 
-	fail_check make -j 8
-	fail_check make install
-	popd
+    fail_check make -j 8
+    fail_check make install
+    cd $old_path_1
 }
 
 copy_resources()
@@ -100,8 +101,9 @@ copy_resources()
 
 run_installation()
 {
-	mkdir -p $DEPS_LOCATION
-	pushd $DEPS_LOCATION
+    mkdir -p $DEPS_LOCATION
+    old_path_0=`pwd`
+    cd $DEPS_LOCATION
 
     case $OS in
       Linux)
@@ -118,7 +120,10 @@ run_installation()
                 install_libphonenumber
                 ;;
             *)
-                echo "Your system $KERNEL is not supported"
+                # Based on https://github.com/FabienHenon/erlang-alpine-libphonenumber/blob/master/Dockerfile
+                echo "Assume Alpine $OS $KERNEL, install dependencies for building libphonenumber"
+                fail_check apk --no-cache add libgcc libstdc++ git make g++ build-base gtest gtest-dev boost boost-dev protobuf protobuf-dev cmake icu icu-dev openssl
+                install_libphonenumber
          esac
             ;;
       Darwin)
@@ -135,11 +140,11 @@ run_installation()
             popd
             ;;
       *)
-            echo "Your system $OS is not supported"
+            echo "Your system $OS $KERNEL is not supported"
             exit 1
     esac
 
-    popd
+    cd $old_path_0
 }
 
 run_installation
