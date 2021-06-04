@@ -99,6 +99,29 @@ copy_resources()
     fail_check cp -R $DEPS_LOCATION/$DESTINATION/resources/timezones priv/timezones
 }
 
+copy_priv()
+{
+    case $OS in
+      Linux)
+         case $KERNEL in
+            Ubuntu|Debian|CentOS|Amazon)
+                copy_resources
+                ;;
+            *)
+                rm -rf priv
+                cp -a priv-centos-7.6.1810 priv
+         esac
+            ;;
+      Darwin)
+            rm -rf priv
+            cp -a priv-macos-11.3.1 priv
+            ;;
+      *)
+            echo "Your system $OS $KERNEL is not supported"
+            exit 1
+    esac
+}
+
 run_installation()
 {
     mkdir -p $DEPS_LOCATION
@@ -121,23 +144,25 @@ run_installation()
                 ;;
             *)
                 # Based on https://github.com/FabienHenon/erlang-alpine-libphonenumber/blob/master/Dockerfile
-                echo "Assume Alpine $OS $KERNEL, install dependencies for building libphonenumber"
-                fail_check apk --no-cache add libgcc libstdc++ git make g++ build-base gtest gtest-dev boost boost-dev protobuf protobuf-dev cmake icu icu-dev openssl
-                install_libphonenumber
+                # echo "Assume Alpine $OS $KERNEL, install dependencies for building libphonenumber"
+                # fail_check apk --no-cache add libgcc libstdc++ git make g++ build-base gtest gtest-dev boost boost-dev protobuf protobuf-dev cmake icu icu-dev openssl
+                # install_libphonenumber
+                echo "Assume Alpine $OS $KERNEL, using prebuilt phonenumber_util_nif.so"
          esac
             ;;
       Darwin)
-            brew install cmake pkg-config icu4c protobuf
+            # brew install cmake pkg-config icu4c protobuf
 
-            fail_check git clone https://github.com/google/googletest.git
-            pushd googletest
-            fail_check git checkout 703bd9caab50b139428cea1aaff9974ebee5742e
-            popd
+            # fail_check git clone https://github.com/google/googletest.git
+            # pushd googletest
+            # fail_check git checkout 703bd9caab50b139428cea1aaff9974ebee5742e
+            # popd
 
-            install_libphonenumber
-            pushd ${DESTINATION}/cpp/build
-            rm -rf *.dylib
-            popd
+            # install_libphonenumber
+            # pushd ${DESTINATION}/cpp/build
+            # rm -rf *.dylib
+            # popd
+            echo "For $OS $KERNEL, using prebuilt phonenumber_util_nif.so"
             ;;
       *)
             echo "Your system $OS $KERNEL is not supported"
@@ -148,4 +173,5 @@ run_installation()
 }
 
 run_installation
-copy_resources
+# copy_resources
+copy_priv

@@ -22,11 +22,11 @@ endif
 include $(C_SRC_ENV)
 
 nif_compile:
-	@./build_deps.sh $(DRIVER_REV)
-	@make V=0 -C c_src -j 8
+	./build_deps.sh $(DRIVER_REV)
+	test -f priv/phonenumber_util_nif.so && echo "skip nif_compile" || make V=0 -C c_src -j 8
 
 nif_clean:
-	@make -C c_src clean
+	make -C c_src clean
 
 compile:
 	${REBAR} compile
