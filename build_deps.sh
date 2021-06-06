@@ -26,6 +26,38 @@ function fail_check
     fi
 }
 
+# https://github.com/google/libphonenumber/tree/master/cpp
+#
+# Supported build parameters
+# --------------------------
+#   Build parameters can be specified invoking CMake with '-DKEY=VALUE' or using a
+#   CMake user interface (ccmake or cmake-gui).
+#
+#   USE_ALTERNATE_FORMATS = ON | OFF [ON]  -- Use alternate formats for the phone
+#                                             number matcher.
+#   USE_BOOST             = ON | OFF [ON]  -- Use Boost. This is only needed in
+#                                             multi-threaded environments that
+#                                             are not Linux and Mac.
+#                                             Libphonenumber relies on Boost for
+#                                             non-POSIX, non-Windows and non-C++ 2011
+#                                             multi-threading.
+#   USE_ICU_REGEXP        = ON | OFF [ON]  -- Use ICU regexp engine.
+#   USE_LITE_METADATA     = ON | OFF [OFF] -- Generates smaller metadata that
+#                                             doesn't include example numbers.
+#   USE_POSIX_THREAD      = ON | OFF [OFF] -- Use Posix thread for multi-threading.
+#   USE_RE2               = ON | OFF [OFF] -- Use RE2.
+#   USE_STD_MAP           = ON | OFF [OFF] -- Force the use of std::map.
+#   USE_STDMUTEX          = ON | OFF [OFF] -- Detect and use C++2011 for multi-threading.
+#   REGENERATE_METADATA   = ON | OFF [ON]  -- When this is set to OFF it will skip
+#                                             regenerating the metadata with
+#                                             BuildMetadataCppFromXml. Since the
+#                                             metadata is included in the source
+#                                             tree anyway, it is beneficial for
+#                                             packagers to turn this OFF: it saves
+#                                             some time, and it also makes it
+#                                             unnecessary to have java in the build
+#                                             environment.
+
 qmake_unix()
 {
     fail_check cmake \
