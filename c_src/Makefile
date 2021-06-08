@@ -11,7 +11,6 @@ ifeq ($(UNAME_SYS), darwin)
 				-L/usr/local/opt/icu4c/lib \
 				-lphonenumber \
 				-lgeocoding \
-				-lboost_thread-mt \
 				-lstdc++ \
 				-Wl,-U,_enif_make_new_binary \
 				-Wl,-U,_enif_make_tuple \
