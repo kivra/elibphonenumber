@@ -9,9 +9,13 @@ ifeq ($(UNAME_SYS), darwin)
 
 	LDFLAGS +=  -L/usr/local/lib/ \
 				-L/usr/local/opt/icu4c/lib \
+				-L$(BASEDIR)/_build/deps/libphonenumber/cpp/build \
 				-lphonenumber \
 				-lgeocoding \
 				-lstdc++ \
+				-licui18n \
+				-licuuc \
+				-lprotobuf \
 				-Wl,-U,_enif_make_new_binary \
 				-Wl,-U,_enif_make_tuple \
 				-Wl,-U,_enif_make_ulong \
@@ -32,17 +36,16 @@ ifeq ($(UNAME_SYS), darwin)
 				-Wl,-U,_enif_free \
 				-Wl,-U,_enif_priv_data
 else
-	LDFLAGS +=  -l:libphonenumber.a \
+	LDFLAGS +=  -L$(BASEDIR)/_build/deps/libphonenumber/cpp/build \
+				-l:libphonenumber.a \
 				-l:libgeocoding.a \
-				-lboost_thread
+				-lboost_thread \
+				-lboost_system \
+				-lboost_date_time \
+				-licui18n \
+				-licuuc \
+				-lprotobuf
 endif
 
 CXXFLAGS +=  -fPIC -g -Wextra -Werror -std=c++11 -fno-exceptions -Wno-unused-parameter -Wno-missing-field-initializers \
 			 -I $(BASEDIR)/_build/deps/libphonenumber/cpp/build/install/include
-
-LDFLAGS +=  -L$(BASEDIR)/_build/deps/libphonenumber/cpp/build \
-			-lboost_system \
-			-lboost_date_time \
-			-licui18n \
-			-licuuc \
-			-lprotobuf
