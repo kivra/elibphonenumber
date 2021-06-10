@@ -16,7 +16,7 @@ KERNEL=$(echo $(lsb_release -ds 2>/dev/null || cat /etc/system-release 2>/dev/nu
 echo "Use repo ${LIB_PHONE_NUMBER_REPO} and revision ${LIB_PHONE_NUMBER_REV}"
 echo "OS detected: ${OS} ${KERNEL}"
 
-function fail_check
+fail_check()
 {
     "$@"
     local status=$?
@@ -166,8 +166,8 @@ run_installation()
          case $KERNEL in
             Ubuntu|Debian)
                 echo "Check Dependecies for $KERNEL"
-                fail_check dpkg -s cmake cmake-curses-gui libgtest-dev libicu-dev protobuf-compiler libprotobuf-dev \
-                                   libboost-dev libboost-thread-dev libboost-system-dev
+                fail_check sudo apt-get -y install cmake cmake-curses-gui libgtest-dev libicu-dev protobuf-compiler libprotobuf-dev \
+                                                   libboost-dev libboost-thread-dev libboost-system-dev
                 install_libphonenumber
                 ;;
             CentOS|Amazon)
