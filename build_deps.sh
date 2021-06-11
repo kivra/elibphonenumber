@@ -11,7 +11,7 @@ fi
 LIB_PHONE_NUMBER_REPO=https://github.com/googlei18n/libphonenumber.git
 LIB_PHONE_NUMBER_REV=$1
 OS=$(uname -s)
-KERNEL=$(echo $(lsb_release -ds 2>/dev/null || cat /etc/system-release 2>/dev/null || cat /etc/*release 2>/dev/null | head -n1 | awk '{print $1;}') | awk '{print $1;}')
+KERNEL=$(cat /etc/os-release | grep ^NAME | awk -F= '$1="NAME" {print $2 ;}' | sed 's/"//g' | awk '{print $1}')
 
 echo "Use repo ${LIB_PHONE_NUMBER_REPO} and revision ${LIB_PHONE_NUMBER_REV}"
 echo "OS detected: ${OS} ${KERNEL}"
