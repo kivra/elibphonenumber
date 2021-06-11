@@ -136,7 +136,7 @@ copy_priv()
     case $OS in
       Linux)
          case $KERNEL in
-            Ubuntu|Debian|CentOS|Amazon)
+            Ubuntu|Debian|CentOS|Amazon|Arch)
                 copy_resources
                 ;;
             *)
@@ -166,11 +166,15 @@ run_installation()
          case $KERNEL in
             Ubuntu|Debian)
                 echo "Check Dependecies for $KERNEL"
-                echo "If the dependencies are not met, run the follow:"
-                echo "    sudo apt-get -y install cmake cmake-curses-gui libgtest-dev libicu-dev protobuf-compiler \\"
-                echo "                            libprotobuf-dev libboost-dev libboost-thread-dev libboost-system-dev"
-                fail_check dpkg -s cmake cmake-curses-gui libgtest-dev libicu-dev protobuf-compiler libprotobuf-dev \
-                                   libboost-dev libboost-thread-dev libboost-system-dev
+                fail_check sudo apt-get -y install cmake cmake-curses-gui libgtest-dev libicu-dev protobuf-compiler libprotobuf-dev \
+                                                   libboost-dev libboost-thread-dev libboost-system-dev
+                install_libphonenumber
+                ;;
+            # NOTE(robert). Have to run this a sudo which i don't really like. Workaround?
+            Arch)
+
+                echo "Check Dependecies for $KERNEL"
+                fail_check sudo pacman -S --noconfirm libphonenumber cmake boost gtest
                 install_libphonenumber
                 ;;
             CentOS|Amazon)
