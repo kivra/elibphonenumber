@@ -166,8 +166,11 @@ run_installation()
          case $KERNEL in
             Ubuntu|Debian)
                 echo "Check Dependecies for $KERNEL"
-                fail_check sudo apt-get -y install cmake cmake-curses-gui libgtest-dev libicu-dev protobuf-compiler libprotobuf-dev \
-                                                   libboost-dev libboost-thread-dev libboost-system-dev
+                echo "If the dependencies are not met, run the follow:"
+                echo "    sudo apt-get -y install cmake cmake-curses-gui libgtest-dev libicu-dev protobuf-compiler \\"
+                echo "                            libprotobuf-dev libboost-dev libboost-thread-dev libboost-system-dev"
+                fail_check dpkg -s cmake cmake-curses-gui libgtest-dev libicu-dev protobuf-compiler libprotobuf-dev \
+                                   libboost-dev libboost-thread-dev libboost-system-dev
                 install_libphonenumber
                 ;;
             CentOS|Amazon)
