@@ -173,11 +173,11 @@ run_installation()
                                    libboost-dev libboost-thread-dev libboost-system-dev
                 install_libphonenumber
                 ;;
-            # NOTE(robert). Have to run this a sudo which i don't really like. Workaround?
             Arch)
-
                 echo "Check Dependecies for $KERNEL"
-                fail_check sudo pacman -S --noconfirm libphonenumber cmake boost gtest
+                echo "If the dependencies are not met, run the follow:"
+                echo "    sudo pacman -S libphonenumber cmake boost gtest"
+                fail_check pacman -Qe libphonenumber cmake boost gtest
                 install_libphonenumber
                 ;;
             CentOS|Amazon)
