@@ -177,7 +177,7 @@ run_installation()
                 echo "Check Dependecies for $KERNEL"
                 echo "If the dependencies are not met, run the follow:"
                 echo "    sudo pacman -S libphonenumber cmake boost gtest"
-                fail_check pacman -Qe libphonenumber cmake boost gtest
+                fail_check pacman -Q libphonenumber cmake boost gtest
                 install_libphonenumber
                 ;;
             CentOS|Amazon)
