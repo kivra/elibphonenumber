@@ -1,5 +1,3 @@
-#!/usr/bin/env sh
-
 DEPS_LOCATION=_build/deps
 DESTINATION=libphonenumber
 
