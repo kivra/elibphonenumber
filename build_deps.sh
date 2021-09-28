@@ -126,7 +126,7 @@ install_libphonenumber()
                     ;;
                 *)
                     # Assume Alpine Linux
-                    apk --no-cache add libphonenumber
+                    apk --no-cache add libphonenumber-dev
             esac
         ;;
 
