@@ -70,6 +70,7 @@ qmake()
 
     case $OS in
         Linux)
+            case 
             qmake_unix
             ;;
         Darwin)
@@ -129,6 +130,15 @@ qmake_darwin()
 
 install_libphonenumber()
 {
+    git clone ${LIB_PHONE_NUMBER_REPO} ${DESTINATION}
+    old_path_1=`pwd`
+    cd ${DESTINATION}
+    fail_check git checkout ${LIB_PHONE_NUMBER_REV}
+    cd $old_path_1
+
+    mkdir -p ${DESTINATION}/cpp/build
+    cd ${DESTINATION}/cpp/build
+
     case $OS in
         Linux)
             case $KERNEL in
@@ -150,6 +160,11 @@ install_libphonenumber()
             echo "Your system $OS $KERNEL is not supported"
             exit 1
     esac
+
+    fail_check make -j 8
+    fail_check make install
+    cd $old_path_1
+
 }
 
 copy_resources()
