@@ -70,7 +70,6 @@ qmake()
 
     case $OS in
         Linux)
-            case 
             qmake_unix
             ;;
         Darwin)
