@@ -115,36 +115,33 @@ install_libphonenumber()
             case $KERNEL in
                 Ubuntu|Debian|CentOS|Amazon|Arch)
                     qmake_unix
-
-                    fail_check make -j 8
-                    fail_check make install
-                    cd $old_path_1
                     ;;
                 *)
                     # Assume Alpine Linux
                     # apk --no-cache add libphonenumber-dev
-                    qmake_alpine
+                    #qmake_alpine
+                    qmake_unix
 
-                    make -Wno-error=deprecated-declarations -j $(grep -c ^processor /proc/cpuinfo)
-                    cp *.a /usr/lib/
-                    cp *.so* /usr/lib
-                    cp -R ../cpp/src/phonenumbers /usr/include/
+                    #fail_check make -Wno-error=deprecated-declarations -j $(grep -c ^processor /proc/cpuinfo)
+                    #cp *.a /usr/lib/
+                    #cp *.so* /usr/lib
+                    #cp -R ../cpp/src/phonenumbers /usr/include/
 
             esac
-        ;;
+            ;;
 
         Darwin)
             qmake_darwin
-
-            fail_check make -j 8
-            fail_check make install
-            cd $old_path_1
             ;;
 
         *)
             echo "Your system $OS $KERNEL is not supported"
             exit 1
     esac
+
+    fail_check make -j 8
+    fail_check make install
+    cd $old_path_1
 }
 
 copy_resources()
