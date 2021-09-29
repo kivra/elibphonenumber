@@ -71,13 +71,6 @@ qmake_unix()
         ..
 }
 
-qmake_alpine()
-{
-    fail_check cmake \
-       -DCMAKE_INSTALL_PREFIX=/usr \
-       ..
-}
-
 qmake_darwin()
 {
     export PKG_CONFIG_PATH="/usr/local/opt/icu4c/lib/pkgconfig"
@@ -118,14 +111,7 @@ install_libphonenumber()
                     ;;
                 *)
                     # Assume Alpine Linux
-                    # apk --no-cache add libphonenumber-dev
-                    #qmake_alpine
                     qmake_unix
-
-                    #fail_check make -Wno-error=deprecated-declarations -j $(grep -c ^processor /proc/cpuinfo)
-                    #cp *.a /usr/lib/
-                    #cp *.so* /usr/lib
-                    #cp -R ../cpp/src/phonenumbers /usr/include/
 
             esac
             ;;
@@ -161,7 +147,7 @@ copy_priv()
                 copy_resources
                 ;;
             *)
-                rm -rf priv
+                copy_resources
                 #cp -a priv-centos-7.6.1810 priv
          esac
             ;;
@@ -208,12 +194,9 @@ run_installation()
                 ;;
             *)
                 # Based on https://github.com/FabienHenon/erlang-alpine-libphonenumber/blob/master/Dockerfile
-                # echo "Assume Alpine $OS $KERNEL, install dependencies for building libphonenumber"
-                echo "Assume Alpine Linux"
+                echo "Assume Alpine $OS $KERNEL, install dependencies for building libphonenumber"
                 fail_check apk --no-cache add libgcc libstdc++ git make g++ build-base gtest gtest-dev boost boost-dev protobuf protobuf-dev cmake icu icu-dev openssl
                 install_libphonenumber
-                #fail_check apk --no-cache add boost-thread icu-libs protobuf
-                #install_libphonenumber
          esac
             ;;
       Darwin)
