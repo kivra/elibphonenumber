@@ -57,30 +57,6 @@ fail_check()
 #                                             environment.
 
 
-qmake()
-{
-    git clone ${LIB_PHONE_NUMBER_REPO} ${DESTINATION}
-    old_path_1=`pwd`
-    cd ${DESTINATION}
-    fail_check git checkout ${LIB_PHONE_NUMBER_REV}
-    cd $old_path_1
-
-    mkdir -p ${DESTINATION}/cpp/build
-    cd ${DESTINATION}/cpp/build
-
-    case $OS in
-        Linux)
-            qmake_unix
-            ;;
-        Darwin)
-            qmake_darwin
-    esac
-
-    fail_check make -j 8
-    fail_check make install
-    cd $old_path_1
-}
-
 qmake_unix()
 {
     fail_check cmake \
@@ -163,7 +139,7 @@ install_libphonenumber()
             fail_check make -j 8
             fail_check make install
             cd $old_path_1
-        ;;
+            ;;
 
         *)
             echo "Your system $OS $KERNEL is not supported"
@@ -236,11 +212,11 @@ run_installation()
             *)
                 # Based on https://github.com/FabienHenon/erlang-alpine-libphonenumber/blob/master/Dockerfile
                 # echo "Assume Alpine $OS $KERNEL, install dependencies for building libphonenumber"
-                # fail_check apk --no-cache add libgcc libstdc++ git make g++ build-base gtest gtest-dev boost boost-dev protobuf protobuf-dev cmake icu icu-dev openssl
-                # install_libphonenumber
                 echo "Assume Alpine Linux"
-                fail_check apk --no-cache add boost-thread icu-libs protobuf
+                fail_check apk --no-cache add libgcc libstdc++ git make g++ build-base gtest gtest-dev boost boost-dev protobuf protobuf-dev cmake icu icu-dev openssl
                 install_libphonenumber
+                #fail_check apk --no-cache add boost-thread icu-libs protobuf
+                #install_libphonenumber
          esac
             ;;
       Darwin)
