@@ -95,6 +95,17 @@ qmake_unix()
         ..
 }
 
+qmake_alpine()
+{
+    fail_check cmake \
+       -DCMAKE_INSTALL_PREFIX=/usr \
+       ../cpp
+    make -Wno-error=deprecated-declarations -j $(grep -c ^processor /proc/cpuinfo)
+    cp *.a /usr/lib/
+    cp *.so* /usr/lib
+    cp -R ../cpp/src/phonenumbers /usr/include/
+}
+
 qmake_darwin()
 {
     export PKG_CONFIG_PATH="/usr/local/opt/icu4c/lib/pkgconfig"
@@ -126,7 +137,8 @@ install_libphonenumber()
                     ;;
                 *)
                     # Assume Alpine Linux
-                    apk --no-cache add libphonenumber-dev libphonenumber
+                    apk --no-cache add libphonenumber-dev
+                    qmake_alpine
             esac
         ;;
 
