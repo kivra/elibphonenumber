@@ -75,7 +75,7 @@ qmake_alpine()
 {
     fail_check cmake \
        -DCMAKE_INSTALL_PREFIX=/usr \
-       ../cpp
+       ..
 }
 
 qmake_darwin()
@@ -122,7 +122,7 @@ install_libphonenumber()
                     ;;
                 *)
                     # Assume Alpine Linux
-                    apk --no-cache add libphonenumber-dev
+                    # apk --no-cache add libphonenumber-dev
                     qmake_alpine
 
                     make -Wno-error=deprecated-declarations -j $(grep -c ^processor /proc/cpuinfo)
