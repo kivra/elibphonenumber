@@ -27,7 +27,11 @@ ifeq (, $(shell which bash))
 else
 	bash ./build_deps.sh $(DRIVER_REV)
 endif
+ifeq ($(SKIP_PREBUILT_NIF),1)
+	make V=0 -C c_src -j 8
+else
 	test -f priv/phonenumber_util_nif.so && echo "skip nif_compile" || make V=0 -C c_src -j 8
+endif
 
 nif_clean:
 	make -C c_src clean
