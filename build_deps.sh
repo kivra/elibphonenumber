@@ -190,7 +190,7 @@ run_installation()
                     fail_check apk --no-cache add libgcc libstdc++ git make g++ build-base gtest gtest-dev boost boost-dev protobuf protobuf-dev cmake icu icu-dev openssl
                     install_libphonenumber
                 else
-                    fail_check apk --no-cache add boost-thread icu-libs
+                    fail_check apk --no-cache add boost-thread icu-libs protobuf
                     echo "Assume Alpine $OS $KERNEL, using prebuilt phonenumber_util_nif.so"
                 fi
          esac
